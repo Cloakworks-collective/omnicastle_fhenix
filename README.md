@@ -1,78 +1,60 @@
-# Fhenix Hardhat Example [![Open in Gitpod][gitpod-badge]][gitpod]
+# Omni Castles on Fhenix
 
-[gitpod]: https://gitpod.io/#https://github.com/fhenixprotocol/fhenix-hardhat-example
-[gitpod-badge]: https://img.shields.io/badge/Gitpod-Open%20in%20Gitpod-FFB45B?logo=gitpod
+This project is built on the foundation of work that began at **ETH Denver** and is a continuation of previous efforts. The original concept was explored in the [Stealth Command project](https://github.com/Cloakworks-collective/stealth_command), and **Omni Castles** expands upon it with several significant technical improvements. It is developed using the [Fhenix Hardhat Example](https://github.com/fhenixprotocol/fhenix-hardhat-example).
 
-This repository contains a sample project that you can use as the starting point
-for your Fhenix project. It's also a great fit for learning the basics of
-Fhenix smart contract development.
+## Improvements Contribution of This Project
 
-This project is intended to be used with the
-[Fhenix Hardhat Beginners Tutorial](TODO), but you should be
-able to follow it by yourself by reading the README and exploring its
-`contracts`, `tests`, `deploy` and `tasks` directories.
+Omni Castles addresses two main challenges that I ran into while doing game development on Fhenix: the lack of oracles and decentralized keepers. By integrating Acurast, the game introduces both functionalities to the Fhenix ecosystem.
 
-It comes with two fhenix-specific hardhat plugins:
+Acurast provides a decentralized, trustless compute execution layer, enabling off-chain workers (processors) to fetch, sign, and submit data on-chain in a confidential and trust-minimized way. For the proof of concept, a Node.js script running on an Acurast processor fetches weather data from the OpenWeather API. This weather data is signed by a designated "weatherman" and forwarded to the game’s smart contract, ensuring authenticity without added trust overhead.
 
-- `fhenix-hardhat-plugin`: The main plugin for fhenix development in hardhat. It injects `fhenixjs` into the hardhat runtime environment, which allows you to interact with encrypted data in your tests and tasks.
-- `fhenix-hardhat-docker`: A plugin that allows you to run a local Fhenix testnet in a docker container. This is useful for testing your contracts in a sandbox before deploying them on a testnet or on mainnet.
+The weather data updates the in-game conditions to one of the following:
 
-## Quick start
-
-The first things you need to do are cloning this repository and installing its dependencies:
-
-```sh
-git clone https://github.com/FhenixProtocol/fhenix-hardhat-example.git
-cd fhenix-hardhat-example
-pnpm install
+```rust
+    const CLEAR: u8 = 0;
+    const CLOUDS: u8 = 1;
+    const SNOW: u8 = 2;
+    const RAIN: u8 = 3;
+    const DRIZZLE: u8 = 4;
+    const THUNDERSTORM: u8 = 5;
 ```
+Each weather condition affects the effectiveness of the units, adding a layer of strategy to the game. 
 
-Next, you need an .env file containing your mnemonics or keys. You can use .env.example that comes with a predefined mnemonic, or use your own
+Moreover, we also use a second script to call `tick_tock()` function of the module to update player states every turn. This is a proof of concept use of Acurast processors as ** decentralized keepers**. This function is not gated (anyone call this), however there is an internal check that only affects the game state if it is called after 1 hr has passed.
 
-```sh
-cp .env.example .env
-```
+Note: You can find out more on Acurast's trust minimized processing [here](https://docs.acurast.com/acurast-protocol/architecture/end-to-end/)
 
-Once the file exists, let's run a LocalFhenix instance:
+Acurast processor clusters are highly decentralized and permissionless, allowing anyone to join and contribute, making the network more resilient and distributed. The picture below showcases various processor clusters. The one on the left represents our cluster, where our proof-of-concept scripts are currently running. In production, we plan to deploy to a randomly selected processor within the Acurast ecosystem (ones that we do not own), with multiple redundancies to further minimize trust assumptions and enhance reliability.
 
-```sh
-pnpm localfhenix:start
-```
+Omni Castles introduces **Acurast Oracles** to the **Fhenix** ecosystem, marking a major advancement for the platform. Previously, Fhenix lacked oracle support, limiting its ability to access off-chain data. By integrating Acurast, Fhenix now has access to external, real-world data, which enables decentralized applications (dApps) to operate with previously unavailable off-chain information. This opens up new possibilities for dApps within the Fhenix ecosystem.
 
-This will start a LocalFhenix instance in a docker container. If this worked you should see a `Started LocalFhenix successfully` message in your console.
+## Game Overview
 
-If not, please make sure you have `docker` installed and running on your machine. You can find instructions on how to install docker [here](https://docs.docker.com/get-docker/).
+In **Omni Castles**, players compete to capture and defend a single castle deployed on the Fhenix platform. The objective is to take control of the castle and maintain that position for as long as possible, as there can only be **one king** at any time. The game follows a **king of the hill** format, where players launch attacks to dethrone the reigning king and seize control of the castle.
 
-Now that we have a LocalFhenix instance running, we can deploy our contracts to it:
+### Public Attacks, Hidden Defense
 
-```sh
-npx hardhat deploy
-```
+A key feature of the game is the transparency of attacks. All **attacks on the castle are public**, meaning the composition of the attacking army is visible to all players. However, the castle's **defense remains hidden**, with its defensive forces encrypted and stored on-chain as hashes. This ensures that only the current king knows the true composition of the defense, adding an element of secrecy.
 
-Note that this template defaults to use the `localfhenix` network, which is injected into the hardhat configuration.
+### On-Chain Battle Computation
 
-Finally, we can run the tasks with:
+When an attack is launched, battle computations are performed entirely on-chain using encrypted data. This is made possible by the **Homomorphic Encryption over the Torus (TFHE)** library, which allows battle outcomes to be calculated without revealing the composition of the castle's defense. This ensures that defense details remain confidential, while providing transparency in the battle results.
 
-```sh
-pnpm task:getCount # => 0
-pnpm task:addCount
-pnpm task:getCount # => 1
-pnpm task:addCount --amount 5
-pnpm task:getCount # => 6
-```
+### Strategic Information Leaks
 
-## Hardhat Network
+A unique aspect of the game is the **controlled leak of information**. Depending on the performance of the defending army—whether it holds the castle or loses it—limited insights into the defense are revealed. This adds a layer of strategic depth, as players can analyze past battles to predict how the castle might be defended in future attacks.
 
-This template contains experimental support for testing using Hardhat Network. By importing the `fhenix-hardhat-network` plugin in `hardhat.config.ts` we add support for simulated operations using Hardhat Network. These do not perform the full FHE computations, and are menant to serve as development tools to verify contract logic.
+### Realtime Oracle Data - Weather
 
-If you have any issues or feature requests regarding this support please open a ticket in this repository 
+Both attacking and defending armies undergo **on-chain verification** to ensure adherence to the game’s rules. This verification process prevents cheating, ensuring that all players follow the established guidelines and that battles are conducted fairly.
 
-## Troubleshooting
+## Key Game Features
 
-If Localfhenix doesn't start this could indicate an error with docker. Please verify that docker is running correctly using the `docker run hello-world` command, which should run a basic container and verify that everything is plugged in.
+- **Single Castle**: One castle, one king—players compete to capture and hold the castle in a king of the hill format.
+- **Public Attacks**: All attacks on the castle are visible to all players, making offensive strategies transparent.
+- **Hidden Defenses**: The castle’s defenses are encrypted and stored on-chain, remaining secret until a breach occurs.
+- **Homomorphic Encryption**: The TFHE library is used to maintain the confidentiality of the castle’s defense while performing battle computations on-chain.
+- **Information Leaks**: Based on battle outcomes, limited information about the defense is revealed, adding strategic depth.
+- **On-Chain Verification**: Both attacking and defending armies are verified on-chain to ensure fair play and rule compliance, maintaining transparency and integrity.
 
-For example, if the docker service is installed but not running, it might indicate you need to need to start it manually.
 
-## More Info
-
-To learn more about the Fhenix Hardhat plugin, check out the [Fhenix Hardhat Plugin Repository](https://github.com/FhenixProtocol/fhenix-hardhat-plugin).

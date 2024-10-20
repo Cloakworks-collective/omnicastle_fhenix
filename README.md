@@ -26,6 +26,8 @@ Note: You can find out more on Acurast's trust minimized processing [here](https
 
 Acurast processor clusters are highly decentralized and permissionless, allowing anyone to join and contribute, making the network more resilient and distributed. The picture below showcases various processor clusters. The one on the left represents our cluster, where our proof-of-concept scripts are currently running. In production, we plan to deploy to a randomly selected processor within the Acurast ecosystem (ones that we do not own), with multiple redundancies to further minimize trust assumptions and enhance reliability.
 
+![alt text](image.png)
+
 Omni Castles introduces **Acurast Oracles** to the **Fhenix** ecosystem, marking a major advancement for the platform. Previously, Fhenix lacked oracle support, limiting its ability to access off-chain data. By integrating Acurast, Fhenix now has access to external, real-world data, which enables decentralized applications (dApps) to operate with previously unavailable off-chain information. This opens up new possibilities for dApps within the Fhenix ecosystem.
 
 ## Game Overview
@@ -56,5 +58,3 @@ Both attacking and defending armies undergo **on-chain verification** to ensure 
 - **Homomorphic Encryption**: The TFHE library is used to maintain the confidentiality of the castle’s defense while performing battle computations on-chain.
 - **Information Leaks**: Based on battle outcomes, limited information about the defense is revealed, adding strategic depth.
 - **On-Chain Verification**: Both attacking and defending armies are verified on-chain to ensure fair play and rule compliance, maintaining transparency and integrity.
-
-

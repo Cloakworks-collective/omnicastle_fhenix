@@ -1,3 +1,7 @@
+Github links related to the project:
+1. https://github.com/Cloakworks-collective/omnicastles_weather
+2. 
+
 # Omni Castles on Fhenix
 
 In **Omni Castles**, players compete to capture and defend a single castle deployed on the Fhenix platform. The objective is to take control of the castle and maintain that position for as long as possible, as there can only be **one king** at any time. The game follows a **king of the hill** format, where players launch attacks to dethrone the reigning king and seize control of the castle.
@@ -22,7 +26,7 @@ The weather data updates the in-game conditions to one of the following:
 ```
 Each weather condition affects the effectiveness of the units, adding a layer of strategy to the game. 
 
-Moreover, we also use a second script to call `tick_tock()` function of the module to update player states every turn. This is a proof of concept use of Acurast processors as ** decentralized keepers**. This function is not gated (anyone call this), however there is an internal check that only affects the game state if it is called after 1 hr has passed.
+Moreover, we also use a second script to call `tick_tock()` function of the module to update player states every turn. This is a proof of concept use of Acurast processors as **decentralized keepers**. This function is not gated (anyone call this), however there is an internal check that only affects the game state if it is called after 1 hr has passed.
 
 Note: You can find out more on Acurast's trust minimized processing [here](https://docs.acurast.com/acurast-protocol/architecture/end-to-end/)
 
@@ -34,17 +38,16 @@ Omni Castles introduces **Acurast Oracles** to the **Fhenix** ecosystem, marking
 
 ## Main Features of the game:
 
-**Public Attacks, Hidden Defense**:
+**Public Attacks, Hidden Defense** --
 A key feature of the game is the transparency of attacks. All **attacks on the castle are public**, meaning the composition of the attacking army is visible to all players. However, the castle's **defense remains hidden**, with its defensive forces encrypted and stored on-chain as hashes. This ensures that only the current king knows the true composition of the defense, adding an element of secrecy.
 
-**On-Chain Battle Computation**
+**On-Chain Battle Computation** --
 When an attack is launched, battle computations are performed entirely on-chain using encrypted data. This is made possible by the **Homomorphic Encryption over the Torus (TFHE)** library, which allows battle outcomes to be calculated without revealing the composition of the castle's defense. This ensures that defense details remain confidential, while providing transparency in the battle results.
 
-**Strategic Information Leaks**
+**Strategic Information Leaks** --
 A unique aspect of the game is the **controlled leak of information**. Depending on the performance of the defending army—whether it holds the castle or loses it—limited insights into the defense are revealed. This adds a layer of strategic depth, as players can analyze past battles to predict how the castle might be defended in future attacks.
 
-**Realtime Oracle Data - Weather**
-
- Realtime Wearther affects the gameplay. e.g - during thunderstorms, cavalry is disadvantaged, and infantry is advantaged. In a clear weather, it is the opposite.
+**Realtime Weather Data** --
+ Realtime weather affects the gameplay. e.g - during thunderstorms, cavalry is disadvantaged, and infantry is advantaged. In a clear weather, it is the opposite.
 
 

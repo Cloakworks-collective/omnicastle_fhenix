@@ -1,5 +1,7 @@
 # Omni Castles on Fhenix
 
+In **Omni Castles**, players compete to capture and defend a single castle deployed on the Fhenix platform. The objective is to take control of the castle and maintain that position for as long as possible, as there can only be **one king** at any time. The game follows a **king of the hill** format, where players launch attacks to dethrone the reigning king and seize control of the castle.
+
 This project is built on the foundation of work that began at **ETH Denver** and is a continuation of previous efforts. The original concept was explored in the [Stealth Command project](https://github.com/Cloakworks-collective/stealth_command), and **Omni Castles** expands upon it with several significant technical improvements. It is developed using the [Fhenix Hardhat Example](https://github.com/fhenixprotocol/fhenix-hardhat-example).
 
 ## Improvements Contribution of This Project
@@ -30,31 +32,19 @@ Acurast processor clusters are highly decentralized and permissionless, allowing
 
 Omni Castles introduces **Acurast Oracles** to the **Fhenix** ecosystem, marking a major advancement for the platform. Previously, Fhenix lacked oracle support, limiting its ability to access off-chain data. By integrating Acurast, Fhenix now has access to external, real-world data, which enables decentralized applications (dApps) to operate with previously unavailable off-chain information. This opens up new possibilities for dApps within the Fhenix ecosystem.
 
-## Game Overview
+## Main Features of the game:
 
-In **Omni Castles**, players compete to capture and defend a single castle deployed on the Fhenix platform. The objective is to take control of the castle and maintain that position for as long as possible, as there can only be **one king** at any time. The game follows a **king of the hill** format, where players launch attacks to dethrone the reigning king and seize control of the castle.
-
-### Public Attacks, Hidden Defense
-
+**Public Attacks, Hidden Defense**:
 A key feature of the game is the transparency of attacks. All **attacks on the castle are public**, meaning the composition of the attacking army is visible to all players. However, the castle's **defense remains hidden**, with its defensive forces encrypted and stored on-chain as hashes. This ensures that only the current king knows the true composition of the defense, adding an element of secrecy.
 
-### On-Chain Battle Computation
-
+**On-Chain Battle Computation**
 When an attack is launched, battle computations are performed entirely on-chain using encrypted data. This is made possible by the **Homomorphic Encryption over the Torus (TFHE)** library, which allows battle outcomes to be calculated without revealing the composition of the castle's defense. This ensures that defense details remain confidential, while providing transparency in the battle results.
 
-### Strategic Information Leaks
-
+**Strategic Information Leaks**
 A unique aspect of the game is the **controlled leak of information**. Depending on the performance of the defending army—whether it holds the castle or loses it—limited insights into the defense are revealed. This adds a layer of strategic depth, as players can analyze past battles to predict how the castle might be defended in future attacks.
 
-### Realtime Oracle Data - Weather
+**Realtime Oracle Data - Weather**
 
-Both attacking and defending armies undergo **on-chain verification** to ensure adherence to the game’s rules. This verification process prevents cheating, ensuring that all players follow the established guidelines and that battles are conducted fairly.
+ Realtime Wearther affects the gameplay. e.g - during thunderstorms, cavalry is disadvantaged, and infantry is advantaged. In a clear weather, it is the opposite.
 
-## Key Game Features
 
-- **Single Castle**: One castle, one king—players compete to capture and hold the castle in a king of the hill format.
-- **Public Attacks**: All attacks on the castle are visible to all players, making offensive strategies transparent.
-- **Hidden Defenses**: The castle’s defenses are encrypted and stored on-chain, remaining secret until a breach occurs.
-- **Homomorphic Encryption**: The TFHE library is used to maintain the confidentiality of the castle’s defense while performing battle computations on-chain.
-- **Information Leaks**: Based on battle outcomes, limited information about the defense is revealed, adding strategic depth.
-- **On-Chain Verification**: Both attacking and defending armies are verified on-chain to ensure fair play and rule compliance, maintaining transparency and integrity.
